@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 80px;
+  float: right;
+  top: 50%;
+  cursor: pointer;
+}
+
+.App-logo:hover {
+  animation: logo-shake 1s linear;
+}
+
+#list {
+  height: fit-content;
+  float: right;
+  top: 50%;
+  cursor: pointer;
+  animation: list-open 1s linear;
+  border: 1px solid #c8d6e5;
+}
+
+@keyframes logo-shake {
+  0% { transform: translateX(2px); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(2px); }
+  100% { transform: translateX(-2px); }
+}
+
+@keyframes list-open {
+  100% { transform: translateX(-100px); }
+}
