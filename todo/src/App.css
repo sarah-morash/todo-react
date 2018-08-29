@@ -13,13 +13,91 @@
   animation: logo-shake 1s linear;
 }
 
+.hidden {
+  display: none;
+}
+
 #list {
   height: fit-content;
   float: right;
   top: 50%;
   cursor: pointer;
-  animation: list-open 1s linear;
   border: 1px solid #c8d6e5;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.delete {
+  margin-top: 5px;
+  background-image: url('./remove.svg');
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-color: #fff;
+  float: right;
+  border: none;
+  cursor: pointer;
+}
+
+.item-add {
+  font-size: 24px;
+  border: 1px solid #c8d6e5;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.item-text {
+  font-size: 24px;
+  margin-top: 5px;
+  vertical-align: middle;
+  float: left;
+  cursor: pointer;
+  padding-left: 24px;
+}
+
+.items {
+  display: grid;
+}
+
+.done {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  background-color: #48dbfb;
+}
+
+.to-do {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  background-color: #feca57;
+}
+
+.all {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  background-color: #00d2d3;
+}
+
+.selected {
+  background-color: #576574;
+}
+
+input[type=checkbox] {
+  margin-top: 5px;
+  border: 1px solid #c8d6e5;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  float: left;
+  cursor: pointer;
 }
 
 @keyframes logo-shake {
@@ -31,6 +109,17 @@
   100% { transform: translateX(-2px); }
 }
 
-@keyframes list-open {
-  100% { transform: translateX(-100px); }
+@keyframes cross-off {
+  from { text-decoration-color: transparent; }
+  to { text-decoration-color: auto; }
+}
+
+.checked {
+  text-decoration: line-through;
+  animation: cross-off .5s forwards;
+  text-decoration-color: #1dd1a1;
+}
+
+.unchecked {
+  text-decoration: none;
 }
