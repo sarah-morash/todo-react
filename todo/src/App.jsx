@@ -1,37 +1,22 @@
-import React, { Component } from "react";
-import logo from "./assets/img/logo.svg";
-import "./components/ListItems/ListItems.css";
+import React, { useState } from "react";
+
 import ListItems from "./components/ListItems/ListItems";
+
 import "./assets/css/animate.css";
+import "./components/ListItems/ListItems.css";
+import logo from "./assets/img/logo.svg";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      clicked: false,
-      items: [],
-      flaggedItems: [],
-      selected: ""
-    };
+const App = () => {
+  const [clicked, setClicked] = useState(false);
+  const [items, setItems] = useState([]);
+  const [flaggedItems, setFlaggedItems] = useState([]);
+  const [selected, setSelected] = useState("");
 
-    this.openList = this.openList.bind(this);
-    this.crossOff = this.crossOff.bind(this);
+  const openList = () => {
+    setClicked(!clicked);
+  };
 
-    this.showTodo = this.showTodo.bind(this);
-    this.showDone = this.showDone.bind(this);
-    this.showAll = this.showAll.bind(this);
-
-    this.addItem = this.addItem.bind(this);
-    this.removeItem = this.removeItem.bind(this);
-  }
-
-  openList() {
-    this.setState({
-      clicked: !this.state.clicked
-    });
-  }
-
-  crossOff(key) {
+  const crossOff = key => {
     this.setState({
       ...this.state,
       items: this.state.items.map(x =>
@@ -41,27 +26,21 @@ class App extends Component {
         x.key === key ? { ...x, checked: !x.checked } : x
       )
     });
-  }
+  };
 
-  showTodo() {
-    this.setState({
-      ...this.state,
-      flaggedItems: this.state.items.filter(x => !x.checked),
-      selected: "to-do"
-    });
-  }
+  const showTodo = () => {
+    setFlaggedItems(items.filter(x => !x.checked));
+    setSelected("to-do");
+  };
 
-  showDone() {
-    this.setState({
-      ...this.state,
-      flaggedItems: this.state.items.filter(x => x.checked),
-      selected: "done"
-    });
-  }
+  const showDone = () => {
+    setFlaggedItems(items.filter(x => x.checked));
+    setSelected("done");
+  };
 
-  showAll() {
-    let checkedItems = this.state.items.filter(x => x.checked);
-    let uncheckedItems = this.state.items.filter(x => !x.checked);
+  const showAll = () => {
+    let checkedItems = items.filter(x => x.checked);
+    let uncheckedItems = items.filter(x => !x.checked);
     let items = [];
 
     if (checkedItems.length !== 0 && uncheckedItems.length !== 0) {
@@ -72,10 +51,11 @@ class App extends Component {
       items = uncheckedItems;
     }
 
-    this.setState({ ...this.state, flaggedItems: items, selected: "show-all" });
-  }
+    setFlaggedItems(items);
+    setSelected("show-all");
+  };
 
-  addItem(e) {
+  const addItem = e => {
     e.preventDefault();
 
     if (this._inputElement.value !== "") {
@@ -85,7 +65,6 @@ class App extends Component {
         checked: false
       };
 
-      console.log(item);
       this.setState(
         {
           ...this.state,
@@ -95,75 +74,67 @@ class App extends Component {
         () => (this._inputElement.value = "")
       );
     }
-  }
+  };
 
-  removeItem(key) {
+  const removeItem = key => {
     this.setState({
       ...this.state,
       items: this.state.items.filter(item => item.key !== key),
       flaggedItems: this.state.items.filter(item => item.key !== key)
     });
-  }
+  };
 
-  render() {
-    let hidden = this.state.clicked ? "" : "hidden";
-    let isDisabled = this.state.items.length !== 0 ? false : true;
+  let hidden = this.state.clicked ? "" : "hidden";
+  let isDisabled = this.state.items.length !== 0 ? false : true;
 
-    return (
-      <div className="App">
-        <img
-          src={logo}
-          className="App-logo"
-          alt="logo"
-          onClick={this.openList}
-        />
-        <div id="list" className={hidden}>
-          <form onSubmit={this.addItem}>
-            <input
-              type="text"
-              placeholder="What's on your list today?"
-              className="item-add"
-              ref={a => (this._inputElement = a)}
-              autofocus="autofocus"
-            />
-          </form>
-
-          <ListItems
-            entries={this.state.flaggedItems}
-            delete={idToRemove => this.removeItem(idToRemove)}
-            onAdd={idToAdd => this.crossOff(idToAdd)}
+  return (
+    <div className="App">
+      <img
+        src={logo}
+        className="App-logo"
+        alt="logo"
+        onClick={() => openList}
+      />
+      <div id="list" className={hidden}>
+        <form onSubmit={this.addItem}>
+          <input
+            type="text"
+            placeholder="What's on your list today?"
+            className="item-add"
+            ref={a => (this._inputElement = a)}
+            autofocus="autofocus"
           />
+        </form>
 
-          <button
-            disabled={isDisabled}
-            onClick={this.showTodo}
-            className={`to-do ${
-              this.state.selected === "to-do" ? "selected" : ""
-            }`}
-          >
-            TO DO
-          </button>
-          <button
-            disabled={isDisabled}
-            onClick={this.showDone}
-            className={`done ${
-              this.state.selected === "done" ? "selected" : ""
-            }`}
-          >
-            DONE
-          </button>
-          <button
-            onClick={this.showAll}
-            className={`all ${
-              this.state.selected === "show-all" ? "selected" : ""
-            }`}
-          >
-            SHOW ALL
-          </button>
-        </div>
+        <ListItems
+          entries={this.state.flaggedItems}
+          delete={idToRemove => this.removeItem(idToRemove)}
+          onAdd={idToAdd => this.crossOff(idToAdd)}
+        />
+
+        <button
+          disabled={isDisabled}
+          onClick={this.showTodo}
+          className={`to-do ${selected === "to-do" ? "selected" : ""}`}
+        >
+          TO DO
+        </button>
+        <button
+          disabled={isDisabled}
+          onClick={() => showDone}
+          className={`done ${selected === "done" ? "selected" : ""}`}
+        >
+          DONE
+        </button>
+        <button
+          onClick={() => showAll}
+          className={`all ${selected === "show-all" ? "selected" : ""}`}
+        >
+          SHOW ALL
+        </button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
